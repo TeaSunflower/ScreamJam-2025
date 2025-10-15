@@ -17,6 +17,6 @@ public class DisplayTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        display.text = "Time: " + ((int)Time.timeSinceLevelLoad).ToString();    
+        display.text = "Time: " + (Time.timeSinceLevelLoad).ToString("F1");    
     }
 }
