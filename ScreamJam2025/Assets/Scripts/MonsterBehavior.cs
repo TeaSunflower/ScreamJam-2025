@@ -13,7 +13,9 @@ public class MonsterBehavior : MonoBehaviour
     }
 
     [SerializeField]
-    Transform player;
+    GameObject player;
+
+    Transform playTrans;
 
     [SerializeField]
     Vector2 patrolPoint;
@@ -35,6 +37,7 @@ public class MonsterBehavior : MonoBehaviour
     void Start()
     {
         currentPosition= GetComponent<Transform>().position;
+        playTrans = player.GetComponent<Transform>();
 
         agent = GetComponent<NavMeshAgent>(); // NavMesh shenanigans
         agent.updateRotation = false;
@@ -67,7 +70,7 @@ public class MonsterBehavior : MonoBehaviour
 
         if (phase == Phase.Chase) // Tracks player for Chase phase
         {
-            agent.SetDestination(player.position);
+            agent.SetDestination(playTrans.position);
         }
         else if (phase == Phase.Patrol) // Tracks patrol points for Patrol phase
         {
@@ -86,7 +89,7 @@ public class MonsterBehavior : MonoBehaviour
     {
         if (phase == Phase.Chase)
         {
-            if (Vector2.Distance(currentPosition, player.position) >= 8) // Distance to return to patrol (add hide condition later)
+            if (Vector2.Distance(currentPosition, playTrans.position) >= 12) // Distance to return to patrol (add hide condition later)
             {
                 phase = Phase.Patrol;
                 agent.speed = 14;
@@ -96,7 +99,7 @@ public class MonsterBehavior : MonoBehaviour
         }
         else if (phase == Phase.Patrol)
         {
-            if (Vector2.Distance(currentPosition, player.position) <= 5) // Distance to begin chase
+            if (Vector2.Distance(currentPosition, playTrans.position) <= 8) // Distance to begin chase
             {
                 phase = Phase.Chase;
                 agent.speed = 10;

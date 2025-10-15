@@ -6,7 +6,7 @@ public class DisplayTime : MonoBehaviour
     [SerializeField]
     Text display;
 
-
+    float time;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,6 +17,7 @@ public class DisplayTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        display.text = "Time: " + (Time.timeSinceLevelLoad).ToString("F1");    
+        time = Time.timeSinceLevelLoad;
+        display.text = "Time: " + (time.ToString("F1");    
     }
 }
