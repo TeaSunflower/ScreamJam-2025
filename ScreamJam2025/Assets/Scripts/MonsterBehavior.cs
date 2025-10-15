@@ -42,6 +42,10 @@ public class MonsterBehavior : MonoBehaviour
 
 
         phase = Phase.Patrol;
+        agent.speed = 14;
+        agent.angularSpeed = 180;
+        agent.acceleration = 12;
+
         nodeList = new List<Vector2>();
 
         // Creates patrol nodes
@@ -85,6 +89,9 @@ public class MonsterBehavior : MonoBehaviour
             if (Vector2.Distance(currentPosition, player.position) >= 8) // Distance to return to patrol (add hide condition later)
             {
                 phase = Phase.Patrol;
+                agent.speed = 14;
+                agent.angularSpeed = 180;
+                agent.acceleration = 12;
             }
         }
         else if (phase == Phase.Patrol)
@@ -92,6 +99,9 @@ public class MonsterBehavior : MonoBehaviour
             if (Vector2.Distance(currentPosition, player.position) <= 5) // Distance to begin chase
             {
                 phase = Phase.Chase;
+                agent.speed = 10;
+                agent.angularSpeed = 120;
+                agent.acceleration = 8;
             }
         }
     }
