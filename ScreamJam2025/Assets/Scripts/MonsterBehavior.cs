@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class MonsterBehavior : MonoBehaviour
 {
@@ -107,5 +108,20 @@ public class MonsterBehavior : MonoBehaviour
                 agent.acceleration = 8;
             }
         }
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("test3");
+        PlayerPrefs.SetFloat("HighScore", Time.timeSinceLevelLoad);
+        SceneManager.LoadScene("Assets/Scenes/GameOver.unity", LoadSceneMode.Single);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("test2");
+        PlayerPrefs.SetFloat("HighScore", Time.timeSinceLevelLoad);
+        SceneManager.LoadScene("Assets/Scenes/GameOver.unity", LoadSceneMode.Single);
     }
 }
