@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlaceSalt : MonoBehaviour
 {
     [SerializeField] List<GameObject> saltSpots;
-    [SerializeField] GameObject player;
+    [SerializeField] public GameObject player;
     [SerializeField] GameObject pickup;
     [SerializeField] int totalSalt;
     private List<ShowSpot> spotScripts = new List<ShowSpot>();
@@ -43,7 +43,7 @@ public class PlaceSalt : MonoBehaviour
         foreach (GameObject spot in saltSpots)
         {
             ShowSpot script = spot.GetComponent<ShowSpot>();
-            script.player = player;
+            script.StartDisabled();
             spotScripts.Add(script);
         }
 
@@ -143,7 +143,7 @@ public class PlaceSalt : MonoBehaviour
     /// <param name="context"></param>
     public void UseSalt(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && heldSalt > 0)
         {
             SetSaltBarrier();
         }

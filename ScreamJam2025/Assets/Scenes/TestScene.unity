@@ -733,7 +733,7 @@ Transform:
   m_GameObject: {fileID: 1270354320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.02, y: -2.35, z: 0}
+  m_LocalPosition: {x: -0.21, y: 0.68, z: 0}
   m_LocalScale: {x: 2, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1036,7 +1036,7 @@ MonoBehaviour:
   player: {fileID: 1821560821}
   pickup: {fileID: 6370407823016841325, guid: ee521d27d30e9384ebcafa4bf3f59eb7, type: 3}
   totalSalt: 4
-  heldSalt: 0
+  heldSalt: 1
   spawnedSalt: 0
   spawnCooldown: 10
   spawnLocations: []
@@ -1415,11 +1415,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 807726301404335770, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.13
+      value: -3.01
       objectReference: {fileID: 0}
     - target: {fileID: 807726301404335770, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1
+      value: -1.93
       objectReference: {fileID: 0}
     - target: {fileID: 807726301404335770, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1453,9 +1453,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 961675965146993622, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 961675965146993622, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
+      propertyPath: m_Color.g
+      value: 0.83137256
+      objectReference: {fileID: 0}
+    - target: {fileID: 961675965146993622, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2298697151097073129, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
       propertyPath: m_Name
       value: Salt Line
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298697151097073129, guid: 1917815ed4bd3a2409bee5e68b073574, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
