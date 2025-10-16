@@ -6,13 +6,18 @@ public class PlaceSalt : MonoBehaviour
 {
     [SerializeField] List<GameObject> saltSpots;
     [SerializeField] GameObject player;
+    private List<ShowSpot> scripts = new List<ShowSpot>();
+    private List<ShowSpot> placedScripts = new List<ShowSpot>();
+    private List<GameObject> placedSpots = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         foreach (GameObject spot in saltSpots)
         {
-            spot.GetComponent<ShowSpot>().player = player;
+            ShowSpot script = spot.GetComponent<ShowSpot>();
+            script.player = player;
+            scripts.Add(script);
         }
     }
 
@@ -68,7 +73,10 @@ public class PlaceSalt : MonoBehaviour
         SpriteRenderer sr = saltSpots[nearest].GetComponent<SpriteRenderer>();
         sr.enabled = true;
         sr.color = Color.white;
-        saltSpots[nearest].GetComponent<ShowSpot>().placed = true;
+        scripts[nearest].placed = true;
+        placedSpots.Add(saltSpots[nearest]);
+        placedScripts.Add(scripts[nearest]);
+        scripts.RemoveAt(nearest);
         saltSpots.RemoveAt(nearest);
     }
 
