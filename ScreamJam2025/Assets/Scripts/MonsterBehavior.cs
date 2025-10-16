@@ -77,8 +77,8 @@ public class MonsterBehavior : MonoBehaviour
         spawnList.Add(new Vector2(-27.5f, -18.5f));
         spawnList.Add(new Vector2(28.5f, -19.5f));
 
-        GetComponent<Transform>().position = spawnList[Random.Range(0, 4)]; // Determines spawn location
-        currentPosition = GetComponent<Transform>().position;
+        currentPosition = spawnList[Random.Range(0, 4)]; // Determines spawn location
+        GetComponent<Transform>().position = currentPosition;
     }
 
     // Update is called once per frame

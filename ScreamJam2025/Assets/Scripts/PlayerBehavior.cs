@@ -88,9 +88,6 @@ public class PlayerBehavior : MonoBehaviour
 
         CheckMovePhase();
 
-        velocity = moveSpeed * moveDirection * Time.fixedDeltaTime;
-        position = rb.position + velocity;
-
         if (stamina > 200) // Caps stamina upper and lower limit
         {
             stamina = 200;
@@ -125,10 +122,14 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
 
-        if (suspicion >= 90)
+        if (suspicion >= 90 && movePhase == Movement.Hidden)
         {
             movePhase = Movement.Revealed;
+            hitBox.enabled = true;
         }
+
+        velocity = moveSpeed * moveDirection * Time.fixedDeltaTime;
+        position = rb.position + velocity;
 
         rb.MovePosition(position); // Moves player
     }
@@ -156,7 +157,7 @@ public class PlayerBehavior : MonoBehaviour
                 }
                 suspicion -= 5;
                 break;
-
+                 
             case Movement.Hidden: // Player is hiding
                 moveSpeed = 0;
                 stamina += 5;
