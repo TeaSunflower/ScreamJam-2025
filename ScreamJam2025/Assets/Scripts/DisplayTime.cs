@@ -18,6 +18,6 @@ public class DisplayTime : MonoBehaviour
     void Update()
     {
         time = Time.timeSinceLevelLoad;
-        display.text = "Time: " + (time.ToString("F1"));    
+        display.text = "Time: " + time.ToString("F1") + "s";    
     }
 }
