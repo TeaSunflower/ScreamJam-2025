@@ -63,6 +63,9 @@ public class PlayerBehavior : MonoBehaviour
         spriteControls = GetComponent<Renderer>();
         hitBox = GetComponent<CircleCollider2D>();
 
+        spriteControls.enabled = true;
+        hitBox.enabled = true;
+
         hideList = new List<Vector2>();
         hideList.Add(new Vector2(-4.5f, 0.5f));
         hideList.Add(new Vector2(14.5f, 7.5f));
