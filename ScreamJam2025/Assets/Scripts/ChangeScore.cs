@@ -14,7 +14,7 @@ public class ChangeScore : MonoBehaviour
             PlayerPrefs.SetFloat("HighScore", 0);
         }
 
-        HighScore.text = "High Score: " + PlayerPrefs.GetFloat("HighScore", 0) + "s";
+        HighScore.text = "High Score: " + PlayerPrefs.GetFloat("HighScore", 0).ToString("F1") + "s";
     }
 
     // Update is called once per frame

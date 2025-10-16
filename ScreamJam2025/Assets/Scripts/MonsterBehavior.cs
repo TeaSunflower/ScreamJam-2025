@@ -28,6 +28,8 @@ public class MonsterBehavior : MonoBehaviour
 
     List<Vector2> nodeList;
 
+    List<Vector2> spawnList;
+
     public int xBounds;
 
     public int yBounds;
@@ -37,7 +39,6 @@ public class MonsterBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentPosition= GetComponent<Transform>().position;
         playTrans = player.GetComponent<Transform>();
 
         agent = GetComponent<NavMeshAgent>(); // NavMesh shenanigans
@@ -62,12 +63,22 @@ public class MonsterBehavior : MonoBehaviour
             }
         }
         patrolPoint = nodeList[Random.Range(0, nodeList.Count)];
+
+        spawnList = new List<Vector2>();
+        spawnList.Add(new Vector2(27.5f, 17.5f));
+        spawnList.Add(new Vector2(-28.5f, 16.5f));
+        spawnList.Add(new Vector2(-27.5f, -18.5f));
+        spawnList.Add(new Vector2(28.5f, -19.5f));
+
+        int spawnLocal = Random.Range(0, 4);
+
+        GetComponent<Transform>().position = spawnList[spawnLocal];
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentPosition = GetComponent<Transform>().position; // Sets current position
+        currentPosition = GetComponent<Transform>().position;
 
         if (phase == Phase.Chase) // Tracks player for Chase phase
         {
@@ -75,7 +86,7 @@ public class MonsterBehavior : MonoBehaviour
         }
         else if (phase == Phase.Patrol) // Tracks patrol points for Patrol phase
         {
-            if (Vector2.Distance(currentPosition, patrolPoint) <= 1.5) // Switches patrol points when within range
+            if (Vector2.Distance(currentPosition, patrolPoint) <= 2) // Switches patrol points when within range
             {
                 patrolPoint = nodeList[Random.Range(0, nodeList.Count)];
             }
