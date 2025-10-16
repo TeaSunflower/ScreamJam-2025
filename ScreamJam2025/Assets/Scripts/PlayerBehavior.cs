@@ -43,7 +43,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public float stamina;
 
-    bool secondPassed;
+    float timeCounter;
 
     List<Vector2> hideList;
 
@@ -57,6 +57,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         stamina = 200;
         suspicion = 0;
+        timeCounter = 0;
         movePhase = Movement.Walking;
 
         rb = GetComponent<Rigidbody2D>();
@@ -78,8 +79,7 @@ public class PlayerBehavior : MonoBehaviour
         hideList.Add(new Vector2(23.5f, -13f));
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (movePhase == Movement.Sprinting && stamina == 0) // Checks if player is stalling out
         {
@@ -128,6 +128,12 @@ public class PlayerBehavior : MonoBehaviour
             hitBox.enabled = true;
         }
 
+        timeCounter += Time.deltaTime;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
         velocity = moveSpeed * moveDirection * Time.fixedDeltaTime;
         position = rb.position + velocity;
 
@@ -140,13 +146,21 @@ public class PlayerBehavior : MonoBehaviour
         {
             case Movement.Walking: // Player is walking
                 moveSpeed = 5.0f;
-                stamina += 1;
-                suspicion -= 1;
+                    stamina += 1;
+                if (timeCounter >= 0.5)
+                {
+                    suspicion -= 1;
+                    timeCounter = 0;
+                }
                 break;
 
             case Movement.Stalling: // Player is trying to sprint with no stamina
                 moveSpeed = 5.0f;
-                suspicion -= 1;
+                if (timeCounter >= 0.5)
+                {
+                    suspicion -= 1;
+                    timeCounter = 0;
+                }
                 break;
 
             case Movement.Sprinting: // Player is sprinting
@@ -155,19 +169,31 @@ public class PlayerBehavior : MonoBehaviour
                 {
                     stamina -= 2;
                 }
-                suspicion -= 5;
+                if (timeCounter >= 0.5)
+                {
+                    suspicion -= 5;
+                    timeCounter = 0;
+                }
                 break;
                  
             case Movement.Hidden: // Player is hiding
                 moveSpeed = 0;
-                stamina += 5;
-                suspicion += 2;
+                    stamina += 3;
+                if (timeCounter >= 0.5)
+                {
+                    suspicion += 2;
+                    timeCounter = 0;
+                }
                 break;
 
             case Movement.Revealed: // Player is revealed/hiding too long
                 moveSpeed = 0;
-                stamina += 5;
-                suspicion += 2;
+                    stamina += 3;
+                if (timeCounter >= 0.5)
+                {
+                    suspicion += 2;
+                    timeCounter = 0;
+                }
                 break;
         }
     }
@@ -179,12 +205,12 @@ public class PlayerBehavior : MonoBehaviour
 
     public void StartSprinting(InputAction.CallbackContext context) // Sprinting input
     {
-        if (context.performed)
+        if (context.performed && movePhase != Movement.Hidden && movePhase != Movement.Revealed)
         {
             movePhase = Movement.Sprinting;
         }
 
-        if (context.canceled)
+        if (context.canceled && movePhase != Movement.Hidden && movePhase != Movement.Revealed)
         {
             movePhase = Movement.Walking;
         }

@@ -41,6 +41,8 @@ public class MonsterBehavior : MonoBehaviour
     public int xBounds;
 
     public int yBounds;
+
+    int frameCounter;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -52,6 +54,7 @@ public class MonsterBehavior : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
+        frameCounter = 0;
 
         phase = Phase.Patrol; // Initial set up
         agent.speed = 14;
@@ -75,10 +78,9 @@ public class MonsterBehavior : MonoBehaviour
         spawnList.Add(new Vector2(27.5f, 17.5f));
         spawnList.Add(new Vector2(-28.5f, 16.5f));
         spawnList.Add(new Vector2(-27.5f, -18.5f));
-        spawnList.Add(new Vector2(28.5f, -19.5f));
+        spawnList.Add(new Vector2(29f, -20f));
 
-        currentPosition = spawnList[Random.Range(0, 4)]; // Determines spawn location
-        GetComponent<Transform>().position = currentPosition;
+        GetComponent<Transform>().position = spawnList[Random.Range(0, 4)]; // Determines spawn location
     }
 
     // Update is called once per frame
@@ -112,6 +114,8 @@ public class MonsterBehavior : MonoBehaviour
             }
         }
 
+        frameCounter++;
+
         CheckPhase(); // Calls CheckPhase()
     }
 
@@ -119,80 +123,117 @@ public class MonsterBehavior : MonoBehaviour
     private void CheckPhase()
     {
         PlayerBehavior.Movement pMove = playBehave.movePhase;
-        
-        switch (phase)
+        int rng;
+        if (frameCounter == 30)
         {
-            case Phase.Chase:
-                if (Vector2.Distance(currentPosition, playTransform.position) >= 12 || pMove == PlayerBehavior.Movement.Hidden ) // Distance to return to patrol (add hide condition later)
-                {
-                    phase = Phase.Patrol;
-                    agent.speed = 14;
-                    agent.angularSpeed = 180;
-                    agent.acceleration = 12;
-                }
-
-                break;
-
-            case Phase.Patrol:
-                if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
-                {
-                    phase = Phase.Chase;
-                    agent.speed = 10;
-                    agent.angularSpeed = 120;
-                    agent.acceleration = 8;
-                    break;
-                }
-                if (Random.Range(0, 2) == 1 && Vector2.Distance(currentPosition, playTransform.position) <= 15)
-                {
-                    phase = Phase.Stalking;
-                    agent.speed = 8;
-                    agent.angularSpeed = 120;
-                    agent.acceleration = 6;
-                }
-
-                break;
-
-            case Phase.Stalking:
-                if (Random.Range(0, 3) == 2)
-                {
-                    phase = Phase.Chase;
-                    agent.speed = 10;
-                    agent.angularSpeed = 120;
-                    agent.acceleration = 8;
-                }
-                break;
-
-            case Phase.Tracking:
-                if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
-                {
-                    phase = Phase.Chase;
-                    agent.speed = 10;
-                    agent.angularSpeed = 120;
-                    agent.acceleration = 8;
-                    break;
-                }
-                if (pMove != PlayerBehavior.Movement.Revealed)
-                {
-                    switch (Random.Range(0, 2))
-                    {
-                        case 0:
-                            phase = Phase.Patrol;
-                            agent.speed = 14;
-                            agent.angularSpeed = 180;
-                            agent.acceleration = 12;
-                            break;
-
-                        case 1:
-                            phase = Phase.Stalking;
-                            agent.speed = 8;
-                            agent.angularSpeed = 120;
-                            agent.acceleration = 6;
-                            break;
-                    }
-                }
-
-                break;
+            rng = Random.Range(0, 4);
+            frameCounter = 0;
         }
+        else
+        {
+            rng = 0;
+            frameCounter++;
+        }
+
+            switch (phase)
+            {
+                case Phase.Chase:
+                    if (Vector2.Distance(currentPosition, playTransform.position) >= 12 || pMove == PlayerBehavior.Movement.Hidden) // Distance to return to patrol (add hide condition later)
+                    {
+                        phase = Phase.Patrol;
+                        agent.speed = 14;
+                        agent.angularSpeed = 180;
+                        agent.acceleration = 12;
+                    }
+                    if (pMove == PlayerBehavior.Movement.Revealed)
+                    {
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                    }
+
+                    break;
+
+                case Phase.Patrol:
+                    if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
+                    {
+                        phase = Phase.Chase;
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                        break;
+                    }
+                    if (rng >= 2 && Vector2.Distance(currentPosition, playTransform.position) >= 15 && pMove != PlayerBehavior.Movement.Hidden)
+                    {
+                        phase = Phase.Stalking;
+                        agent.speed = 8;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 6;
+                    }
+                    if (pMove == PlayerBehavior.Movement.Revealed)
+                    {
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                    }
+
+                    break;
+
+                case Phase.Stalking:
+                    if (rng == 3 && pMove != PlayerBehavior.Movement.Hidden)
+                    {
+                        phase = Phase.Chase;
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                    }
+                    if (pMove == PlayerBehavior.Movement.Hidden)
+                    {
+                        phase = Phase.Patrol;
+                        agent.speed = 14;
+                        agent.angularSpeed = 180;
+                        agent.acceleration = 12;
+                    }
+                    if (pMove == PlayerBehavior.Movement.Revealed)
+                    {
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                    }
+                    break;
+
+                case Phase.Tracking:
+                    if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
+                    {
+                        phase = Phase.Chase;
+                        agent.speed = 10;
+                        agent.angularSpeed = 120;
+                        agent.acceleration = 8;
+                        break;
+                    }
+                    if (pMove != PlayerBehavior.Movement.Revealed)
+                    {
+                        switch (Random.Range(0, 2))
+                        {
+                            case 0:
+                                phase = Phase.Patrol;
+                                agent.speed = 14;
+                                agent.angularSpeed = 180;
+                                agent.acceleration = 12;
+                                break;
+
+                            case 1:
+                                phase = Phase.Stalking;
+                                agent.speed = 8;
+                                agent.angularSpeed = 120;
+                                agent.acceleration = 6;
+                                break;
+                        }
+                    }
+
+                    break;
+            }
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
