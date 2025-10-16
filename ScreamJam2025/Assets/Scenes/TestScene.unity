@@ -1034,6 +1034,13 @@ MonoBehaviour:
   - {fileID: 1270354320}
   - {fileID: 121680870}
   player: {fileID: 1821560821}
+  pickup: {fileID: 6370407823016841325, guid: ee521d27d30e9384ebcafa4bf3f59eb7, type: 3}
+  totalSalt: 4
+  heldSalt: 0
+  spawnedSalt: 0
+  spawnCooldown: 10
+  spawnLocations: []
+  inactives: 
 --- !u!1 &1821560821
 GameObject:
   m_ObjectHideFlags: 0
@@ -1045,7 +1052,7 @@ GameObject:
   - component: {fileID: 1821560823}
   - component: {fileID: 1821560822}
   m_Layer: 0
-  m_Name: DummyPlayer
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

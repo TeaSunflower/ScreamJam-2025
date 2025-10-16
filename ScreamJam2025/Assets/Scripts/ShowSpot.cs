@@ -6,11 +6,13 @@ public class ShowSpot : MonoBehaviour
     private bool highlighted = false;
     public bool placed = false;
     private SpriteRenderer sr;
+    PlaceSalt manager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        manager = PlaceSalt.Instance;
     }
 
     // Update is called once per frame
@@ -24,12 +26,10 @@ public class ShowSpot : MonoBehaviour
         if (!placed)
         {
             float dist = GetDistance();
-            Debug.Log(dist);
-            if (!highlighted && dist <= 2)
+            if (manager.heldSalt > 0 && !highlighted && dist <= 2)
             {
                 highlighted = true;
                 sr.enabled = true;
-                Debug.Log("highlighted");
             }
             else if (highlighted && dist > 2)
             {
@@ -48,6 +48,16 @@ public class ShowSpot : MonoBehaviour
         float xdif = player.transform.position.x - transform.position.x;
         float ydif = player.transform.position.y - transform.position.y;
         return (Mathf.Sqrt((xdif * xdif) + (ydif * ydif)));
+    }
+
+    /// <summary>
+    /// places the salt spot
+    /// </summary>
+    public void SetPlaced()
+    {
+        sr.enabled = true;
+        sr.color = Color.white;
+        placed = true;
     }
 
 }

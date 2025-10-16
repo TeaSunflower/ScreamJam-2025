@@ -9870,6 +9870,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ed6dae35a11237438698e3ee0cf7d6e, type: 3}
+--- !u!1 &1847508654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1847508657}
+  - component: {fileID: 1847508656}
+  - component: {fileID: 1847508655}
+  m_Layer: 0
+  m_Name: Interactable Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1847508655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847508654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3134f054ecd57d42b8feeda44b2ce3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlit: []
+  player: {fileID: 1529617967}
+--- !u!114 &1847508656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847508654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2de9c9665a075b640989c4f70d0767d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saltSpots: []
+  player: {fileID: 1529617967}
+  pickup: {fileID: 0}
+  totalSalt: 4
+  heldSalt: 0
+  spawnedSalt: 0
+  spawnCooldown: 10
+  spawnLocations: []
+  inactives: 
+--- !u!4 &1847508657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847508654}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.5710438, y: -4.575067, z: -0.011539829}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1856185879
 GameObject:
   m_ObjectHideFlags: 0
@@ -11189,3 +11257,4 @@ SceneRoots:
   - {fileID: 404401773}
   - {fileID: 415136264}
   - {fileID: 818862453}
+  - {fileID: 1847508657}
