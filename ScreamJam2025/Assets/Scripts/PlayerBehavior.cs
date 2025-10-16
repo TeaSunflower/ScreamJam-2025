@@ -1,18 +1,24 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 public class PlayerBehavior : MonoBehaviour
 {
-    enum Movement
+    public enum Movement
     {
         Hidden,
         Walking,
         Sprinting,
-        Stalling
+        Stalling,
+        Revealed
     }
 
     [SerializeField]
     Slider staminaBar;
+
+    [SerializeField]
+    Slider susBar;
     
     [SerializeField]
     float moveSpeed;
@@ -27,11 +33,22 @@ public class PlayerBehavior : MonoBehaviour
     Vector2 velocity;
 
     [SerializeField]
-    Movement movePhase;
+    public Movement movePhase;
+
+    [SerializeField]
+    bool canHide;
+
+    // Maybe add a slider for this?
+    public int suspicion;
 
     public float stamina;
 
     bool secondPassed;
+
+    List<Vector2> hideList;
+
+    Renderer spriteControls;
+    CircleCollider2D hitBox;
 
     Rigidbody2D rb;
 
@@ -39,8 +56,23 @@ public class PlayerBehavior : MonoBehaviour
     void Start()
     {
         stamina = 200;
+        suspicion = 0;
         movePhase = Movement.Walking;
+
         rb = GetComponent<Rigidbody2D>();
+        spriteControls = GetComponent<Renderer>();
+        hitBox = GetComponent<CircleCollider2D>();
+
+        hideList = new List<Vector2>();
+        hideList.Add(new Vector2(-4.5f, 0.5f));
+        hideList.Add(new Vector2(14.5f, 7.5f));
+        hideList.Add(new Vector2(7.5f, 16.5f));
+        hideList.Add(new Vector2(-30.5f, 16.5f));
+        hideList.Add(new Vector2(-11.5f, 10.5f));
+        hideList.Add(new Vector2(-25.5f, -12.5f));
+        hideList.Add(new Vector2(-2.5f, -7.5f));
+        hideList.Add(new Vector2(6.5f, -17.5f));
+        hideList.Add(new Vector2(23.5f, -13f));
     }
 
     // Update is called once per frame
@@ -51,36 +83,10 @@ public class PlayerBehavior : MonoBehaviour
             movePhase = Movement.Stalling;
         }
 
-        switch (movePhase)
-        {
-            case Movement.Walking: // Player is walking
-                moveSpeed = 5.0f;
-                stamina += 1;
-                break;
-
-            case Movement.Stalling: // Player is trying to sprint with no stamina
-                moveSpeed = 5.0f;
-                break;
-
-            case Movement.Sprinting: // Player is sprinting
-                moveSpeed = 8.0f;
-                if (moveDirection != Vector2.zero)
-                {
-                    stamina -= 2;
-                }
-                break;
-
-            case Movement.Hidden: // Player is hiding
-                moveSpeed = 0;
-                if (secondPassed)
-                stamina += 5;
-                break;
-        }
+        CheckMovePhase();
 
         velocity = moveSpeed * moveDirection * Time.fixedDeltaTime;
         position = rb.position + velocity;
-
-        staminaBar.value = stamina / 200; // Sets stamina bar
 
         if (stamina > 200) // Caps stamina upper and lower limit
         {
@@ -91,7 +97,75 @@ public class PlayerBehavior : MonoBehaviour
             stamina = 0;
         }
 
+        if (suspicion > 100) // Caps suspicion upper and lower limit
+        {
+            suspicion = 100;
+        }
+        else if (suspicion < 0)
+        {
+            suspicion = 0;
+        }
+
+        staminaBar.value = stamina / 200; // Sets stamina bar
+        susBar.value = suspicion / 100; // Sets suspicion bar
+
+        for (int i = 0; i < hideList.Count; i++)
+        {
+            if (Vector2.Distance(position, hideList[i]) <= 1)
+            {
+                canHide = true;
+                break;
+            }
+            else
+            {
+                canHide = false;
+            }
+        }
+
+        if (suspicion >= 90)
+        {
+            movePhase = Movement.Revealed;
+        }
+
         rb.MovePosition(position); // Moves player
+    }
+
+    private void CheckMovePhase()
+    {
+        switch (movePhase)
+        {
+            case Movement.Walking: // Player is walking
+                moveSpeed = 5.0f;
+                stamina += 1;
+                suspicion -= 1;
+                break;
+
+            case Movement.Stalling: // Player is trying to sprint with no stamina
+                moveSpeed = 5.0f;
+                suspicion -= 1;
+                break;
+
+            case Movement.Sprinting: // Player is sprinting
+                moveSpeed = 8.0f;
+                if (moveDirection != Vector2.zero)
+                {
+                    stamina -= 2;
+                }
+                suspicion -= 5;
+                break;
+
+            case Movement.Hidden: // Player is hiding
+                moveSpeed = 0;
+                stamina += 5;
+                suspicion += 2;
+                break;
+
+            case Movement.Revealed: // Player is revealed/hiding too long
+                moveSpeed = 0;
+                stamina += 5;
+                suspicion += 2;
+                break;
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context) // Movement vector
@@ -109,6 +183,25 @@ public class PlayerBehavior : MonoBehaviour
         if (context.canceled)
         {
             movePhase = Movement.Walking;
+        }
+    }
+
+    public void Hide(InputAction.CallbackContext context)
+    {
+        if (canHide)
+        {
+            if (movePhase == Movement.Hidden || movePhase == Movement.Revealed)
+            {
+                movePhase = Movement.Walking;
+                spriteControls.enabled = true;
+                hitBox.enabled = true;
+            }
+            else
+            {
+                movePhase = Movement.Hidden;
+                spriteControls.enabled = false;
+                hitBox.enabled = false;
+            }
         }
     }
 }
