@@ -48,7 +48,7 @@ public class PlayerBehavior : MonoBehaviour
     List<Vector2> hideList;
 
     Renderer spriteControls;
-    CircleCollider2D hitBox;
+    BoxCollider2D hitBox;
 
     Rigidbody2D rb;
 
@@ -61,7 +61,7 @@ public class PlayerBehavior : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         spriteControls = GetComponent<Renderer>();
-        hitBox = GetComponent<CircleCollider2D>();
+        hitBox = GetComponent<BoxCollider2D>();
 
         spriteControls.enabled = true;
         hitBox.enabled = true;
