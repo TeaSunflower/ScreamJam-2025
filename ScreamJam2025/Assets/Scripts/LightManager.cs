@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 public class LightManager : MonoBehaviour
 {
@@ -72,13 +73,13 @@ public class LightManager : MonoBehaviour
     public void LightLantern()
     {
         int nearest = GetNearestLantern();
-        if (GetDistance(unlit[nearest]) > 10)
+        if (GetDistance(unlit[nearest]) > 2)
         {
             return;
         }
         lit.Add(unlit[nearest]);
-        SpriteRenderer sr = unlit[nearest].GetComponent<SpriteRenderer>();
-        sr.color = Color.red;
+        Light2D light = unlit[nearest].GetComponent<Light2D>();
+        light.enabled = true;
         unlit.RemoveAt(nearest);
     }
 }
