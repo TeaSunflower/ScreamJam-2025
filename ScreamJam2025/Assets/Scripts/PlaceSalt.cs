@@ -6,12 +6,14 @@ public class PlaceSalt : MonoBehaviour
 {
     [SerializeField] List<GameObject> saltSpots;
     [SerializeField] GameObject player;
-    private List<GameObject> usedSpots = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        foreach (GameObject spot in saltSpots)
+        {
+            spot.GetComponent<ShowSpot>().player = player;
+        }
     }
 
     // Update is called once per frame
@@ -44,7 +46,7 @@ public class PlaceSalt : MonoBehaviour
     /// <summary>
     /// gets the distance between the player and the salt spot
     /// </summary>
-    /// <param name="lantern"></param>
+    /// <param name="line"></param>
     /// <returns></returns>
     public float GetDistance(GameObject line)
     {
@@ -59,12 +61,14 @@ public class PlaceSalt : MonoBehaviour
     public void SetSaltBarrier()
     {
         int nearest = GetNearestSpot();
-        if (GetDistance(saltSpots[nearest]) > 10)
+        if (GetDistance(saltSpots[nearest]) > 2)
         {
             return;
         }
-        usedSpots.Add(saltSpots[nearest]);
-        saltSpots[nearest].SetActive(true);
+        SpriteRenderer sr = saltSpots[nearest].GetComponent<SpriteRenderer>();
+        sr.enabled = true;
+        sr.color = Color.white;
+        saltSpots[nearest].GetComponent<ShowSpot>().placed = true;
         saltSpots.RemoveAt(nearest);
     }
 
