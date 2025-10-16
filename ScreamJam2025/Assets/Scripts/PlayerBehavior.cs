@@ -39,7 +39,7 @@ public class PlayerBehavior : MonoBehaviour
     bool canHide;
 
     // Maybe add a slider for this?
-    public int suspicion;
+    public float suspicion;
 
     public float stamina;
 
