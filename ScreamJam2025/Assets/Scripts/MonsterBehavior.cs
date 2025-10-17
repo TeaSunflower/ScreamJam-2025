@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,8 @@ public class MonsterBehavior : MonoBehaviour
         Patrol,
         Chase,
         Stalking,
-        Tracking
+        Tracking,
+        Flee
     }
 
     [SerializeField]
@@ -119,6 +121,34 @@ public class MonsterBehavior : MonoBehaviour
                     agent.SetDestination(currentPosition);
                 }
             }
+
+            if (phase == Phase.Flee)
+            {
+                float distance = 10000;
+                Vector2 dest = spawnList[0];
+                for (int i = 0; i < spawnList.Count; i++)
+                {
+                    if (Vector2.Distance(spawnList[i], currentPosition) < distance)
+                    {
+                        dest = spawnList[i];
+                        distance = Vector2.Distance(spawnList[i], currentPosition);
+                        if (Vector2.Distance(spawnList[i], playTransform.position) < distance)
+                        {
+                            if (i >= 2)
+                            {
+                                dest = spawnList[i - 2];
+                            }
+                            else
+                            {
+                                dest = spawnList[i + 2];
+                            }
+                        }
+
+                    }
+                }
+
+                agent.SetDestination(dest);
+            }
         }
         else
         {
@@ -156,8 +186,8 @@ public class MonsterBehavior : MonoBehaviour
         }
 
         switch (phase)
-            {
-                case Phase.Chase:
+        {
+            case Phase.Chase:
                 if (Vector2.Distance(currentPosition, playTransform.position) >= 12 || pMove == PlayerBehavior.Movement.Hidden) // Distance to return to patrol (add hide condition later)
                     {
                         phase = Phase.Patrol;
@@ -168,7 +198,7 @@ public class MonsterBehavior : MonoBehaviour
 
                     break;
 
-                case Phase.Patrol:
+            case Phase.Patrol:
                 if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
                     {
                         phase = Phase.Chase;
@@ -188,24 +218,37 @@ public class MonsterBehavior : MonoBehaviour
 
                     break;
 
-                case Phase.Stalking:
-                    if (rng == 3 && pMove != PlayerBehavior.Movement.Hidden)
+            case Phase.Stalking:
+                if (Vector2.Distance(currentPosition, playTransform.position) <= 2)
+                {
+                    phase = Phase.Flee;
+                    agent.speed = 16;
+                    agent.angularSpeed = 180;
+                    agent.acceleration = 14;
+                    break;
+                }
+
+                    if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && rng == 3 && pMove != PlayerBehavior.Movement.Hidden)
                     {
                         phase = Phase.Chase;
                         agent.speed = 10;
                         agent.angularSpeed = 120;
                         agent.acceleration = 8;
+                    break;
                     }
+
                     if (pMove == PlayerBehavior.Movement.Hidden)
                     {
                         phase = Phase.Patrol;
                         agent.speed = 14;
-                        agent.angularSpeed = 180;
+                        agent.angularSpeed = 150;
                         agent.acceleration = 12;
                     }
                     break;
 
                 case Phase.Tracking:
+                if (pMove != PlayerBehavior.Movement.Revealed)
+                {
                     if (Vector2.Distance(currentPosition, playTransform.position) <= 8 && pMove != PlayerBehavior.Movement.Hidden) // Distance to begin chase
                     {
                         phase = Phase.Chase;
@@ -214,28 +257,38 @@ public class MonsterBehavior : MonoBehaviour
                         agent.acceleration = 8;
                         break;
                     }
-                    if (pMove != PlayerBehavior.Movement.Revealed)
-                    {
-                        switch (Random.Range(0, 2))
+
+                    switch (Random.Range(0, 2))
                         {
                             case 0:
                                 phase = Phase.Patrol;
                                 agent.speed = 14;
                                 agent.angularSpeed = 180;
                                 agent.acceleration = 12;
-                                break;
+                            break;
 
                             case 1:
                                 phase = Phase.Stalking;
                                 agent.speed = 8;
                                 agent.angularSpeed = 120;
                                 agent.acceleration = 6;
-                                break;
+                            break;
                         }
+
                     }
 
                     break;
-            }
+
+            case Phase.Flee:
+                if (Vector2.Distance(currentPosition, playTransform.position) >= 10)
+                {
+                    phase = Phase.Patrol;
+                    agent.speed = 14;
+                    agent.angularSpeed = 180;
+                    agent.acceleration = 12;
+                }
+                break;
+        }
 
     }
 

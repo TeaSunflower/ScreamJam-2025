@@ -44,6 +44,7 @@ public class PlayerBehavior : MonoBehaviour
     public float stamina;
 
     float timeCounter;
+    bool susTick;
 
     List<Vector2> hideList;
 
@@ -58,6 +59,7 @@ public class PlayerBehavior : MonoBehaviour
         stamina = 200;
         suspicion = 0;
         timeCounter = 0;
+        susTick = false;
         movePhase = Movement.Walking;
 
         rb = GetComponent<Rigidbody2D>();
@@ -146,52 +148,93 @@ public class PlayerBehavior : MonoBehaviour
         {
             case Movement.Walking: // Player is walking
                 moveSpeed = 5.0f;
-                    stamina += 0.5f;
-                if (timeCounter >= 0.5)
+                if (timeCounter >= 0.25)
                 {
-                    suspicion -= 1;
-                    timeCounter = 0;
+                    stamina += 2;
+                    if (susTick)
+                    {
+                        suspicion -= 1;
+                        susTick = false;
+                    }
+                    else
+                    {
+                        susTick = true;
+                    }
+                        timeCounter = 0;
                 }
                 break;
 
             case Movement.Stalling: // Player is trying to sprint with no stamina
                 moveSpeed = 5.0f;
-                if (timeCounter >= 0.5)
+                if (timeCounter >= 0.25)
                 {
-                    suspicion -= 1;
+                    if (susTick)
+                    {
+                        suspicion -= 1;
+                        susTick = false;
+                    }
+                    else
+                    {
+                        susTick = true;
+                    }
                     timeCounter = 0;
                 }
                 break;
 
             case Movement.Sprinting: // Player is sprinting
                 moveSpeed = 8.0f;
-                if (moveDirection != Vector2.zero)
+                if (timeCounter >= 0.25)
                 {
-                    stamina -= 1;
-                }
-                if (timeCounter >= 0.5)
-                {
-                    suspicion -= 5;
+                    if (moveDirection != Vector2.zero)
+                    {
+                        stamina -= 5;
+                    }
+
+                    if (susTick)
+                    {
+                        suspicion -= 2;
+                        susTick = false;
+                    }
+                    else
+                    {
+                        susTick = true;
+                    }
                     timeCounter = 0;
                 }
                 break;
                  
             case Movement.Hidden: // Player is hiding
                 moveSpeed = 0;
-                    stamina += 1;
-                if (timeCounter >= 0.5)
+                if (timeCounter >= 0.25)
                 {
-                    suspicion += 2;
+                    stamina += 4;
+                    if (susTick)
+                    {
+                        suspicion += 2;
+                        susTick = false;
+                    }
+                    else
+                    {
+                        susTick = true;
+                    }
                     timeCounter = 0;
                 }
                 break;
 
             case Movement.Revealed: // Player is revealed/hiding too long
                 moveSpeed = 0;
-                    stamina += 1;
-                if (timeCounter >= 0.5)
+                if (timeCounter >= 0.25)
                 {
-                    suspicion += 2;
+                    stamina += 4;
+                    if (susTick)
+                    {
+                        suspicion += 2;
+                        susTick = false;
+                    }
+                    else
+                    {
+                        susTick = true;
+                    }
                     timeCounter = 0;
                 }
                 break;
