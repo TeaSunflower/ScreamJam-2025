@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -53,9 +52,13 @@ public class PlayerBehavior : MonoBehaviour
 
     Rigidbody2D rb;
 
+    Vector2 startPosition;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        startPosition = new Vector2(-4.5f, 3);
+        
         stamina = 200;
         suspicion = 0;
         timeCounter = 0;
@@ -79,6 +82,8 @@ public class PlayerBehavior : MonoBehaviour
         hideList.Add(new Vector2(-2.5f, -7.5f));
         hideList.Add(new Vector2(6.5f, -17.5f));
         hideList.Add(new Vector2(23.5f, -13f));
+
+        rb.MovePosition(startPosition);
     }
 
     void Update()
@@ -153,7 +158,7 @@ public class PlayerBehavior : MonoBehaviour
                     stamina += 2;
                     if (susTick)
                     {
-                        suspicion -= 1;
+                        suspicion -= 0.5f;
                         susTick = false;
                     }
                     else
@@ -170,7 +175,7 @@ public class PlayerBehavior : MonoBehaviour
                 {
                     if (susTick)
                     {
-                        suspicion -= 1;
+                        suspicion -= 0.5f;
                         susTick = false;
                     }
                     else
@@ -192,7 +197,7 @@ public class PlayerBehavior : MonoBehaviour
 
                     if (susTick)
                     {
-                        suspicion -= 2;
+                        suspicion -= 1;
                         susTick = false;
                     }
                     else
