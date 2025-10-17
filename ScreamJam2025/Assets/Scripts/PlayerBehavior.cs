@@ -146,7 +146,7 @@ public class PlayerBehavior : MonoBehaviour
         {
             case Movement.Walking: // Player is walking
                 moveSpeed = 5.0f;
-                    stamina += 1;
+                    stamina += 0.5f;
                 if (timeCounter >= 0.5)
                 {
                     suspicion -= 1;
@@ -167,7 +167,7 @@ public class PlayerBehavior : MonoBehaviour
                 moveSpeed = 8.0f;
                 if (moveDirection != Vector2.zero)
                 {
-                    stamina -= 2;
+                    stamina -= 1;
                 }
                 if (timeCounter >= 0.5)
                 {
@@ -178,7 +178,7 @@ public class PlayerBehavior : MonoBehaviour
                  
             case Movement.Hidden: // Player is hiding
                 moveSpeed = 0;
-                    stamina += 3;
+                    stamina += 1;
                 if (timeCounter >= 0.5)
                 {
                     suspicion += 2;
@@ -188,7 +188,7 @@ public class PlayerBehavior : MonoBehaviour
 
             case Movement.Revealed: // Player is revealed/hiding too long
                 moveSpeed = 0;
-                    stamina += 3;
+                    stamina += 1;
                 if (timeCounter >= 0.5)
                 {
                     suspicion += 2;

@@ -4982,6 +4982,7 @@ MonoBehaviour:
   phase: 0
   xBounds: 30
   yBounds: 20
+  timeCounter: 0
 --- !u!195 &863862707
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -9062,7 +9063,7 @@ GameObject:
   - component: {fileID: 1529617973}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
